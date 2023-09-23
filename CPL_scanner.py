@@ -10,42 +10,45 @@ def remove_items(test_list, item):
     res = [i for i in test_list if i != item]
     return res
 
+import re
+
+import re
+
+import re
+
 def tokenize_line(line):
     tokens = []
     current_token = ""
     in_string = False
+    in_hanging_comment = False
 
-    # Define regular expressions for different token types
-    keyword_regex = r'\b(import|implementations|function|main|is|variables|define|of|begin|display|set|input|if|then|else|endif|not|greater|or|equal|return)\b'
-    string_literal_regex = r'("[^"]*"|\'[^\']*\')'
-    identifier_regex = r'[a-zA-Z_]\w*'
-    numeric_literal_regex = r'\b\d+(\.\d+)?\b'
-    
     # Combine all the regular expressions
-    regex = f'({keyword_regex})|({string_literal_regex})|({identifier_regex})|({numeric_literal_regex})|(\S)'
+    regex = r'("[^"]*"|\'[^\']*\')|(/\*.*?\*/)|(//.*)|(\b(import|implementations|function|main|is|variables|define|of|begin|display|set|input|if|then|else|endif|not|greater|or|equal|return)\b)|([a-zA-Z_]\w*)|(\d+(\.\d+)?)|(:|\.|:|,|/|=|>|\*|\))'
 
     matches = re.finditer(regex, line)
 
     for match in matches:
         token = match.group(0)
-        
+
         if token.strip() == "":
             continue  # Ignore whitespace tokens
-        
-        if token.startswith('"') or token.startswith("'"):
-            if in_string:
-                in_string = False
-                current_token += token
-                tokens.append(current_token)
-                current_token = ""
-            else:
-                in_string = True
-                current_token = token
-        else:
-            if in_string:
-                current_token += token
-            else:
-                tokens.append(token)
+
+        if '*/' in token:
+            in_hanging_comment = True
+            continue  # Ignore the end of the hanging comment token
+
+        if in_hanging_comment:
+            continue  # Ignore tokens within hanging comments
+
+        if '//' in token:
+            # If '//' is found, truncate the token to exclude everything after '//'
+            token = token.split('//')[0].strip()
+
+        tokens.append(token)
+
+        if '/*' in token:
+            in_hanging_comment = False
+            continue  # Ignore the start of the hanging comment token
 
     return tokens
 
@@ -60,19 +63,31 @@ def filter_file(File_name):
 
     lineList = []
 
-    for line in file:
-        if line.startswith("/*"):
-            continue  # Skip the comment line
+    in_hanging_comment = False  # Flag to track if we're inside a hanging comment
 
-        lineTokens = tokenize_line(line)
-        
-        # Remove empty tokens or tokens containing only whitespace
-        lineTokens = [token for token in lineTokens if token.strip() != '']
-        
-        if lineTokens:
-            lineList.append(lineTokens)
+    for line in file:
+        if '/*' in line:
+            in_hanging_comment = True
+
+        if in_hanging_comment:
+            if '*/' in line:
+                in_hanging_comment = False
+            continue  # Skip lines within hanging comments
+        else:
+            if line.startswith("/*"):
+                continue  # Skip the comment line
+
+            lineTokens = tokenize_line(line)
+
+            # Remove empty tokens or tokens containing only whitespace
+            lineTokens = [token for token in lineTokens if token.strip() != '']
+
+            if lineTokens:
+                lineList.append(lineTokens)
 
     return lineList
+
+
 
 # checks if a string is a float
 def isfloat(num):
@@ -96,27 +111,25 @@ def merge_dictionaries(dict1, dict2):
 
 # Function to categorize tokens
 def categorize_token(token):
-    if token.isspace():
-        return {"Type": "Whitespace", "id": 999, "value": token}
-    elif token == "EOS":
+    if token == "EOS":
         return {"Type": "EndOfStatement", "id": 1000, "value": token}
-    elif token in ["/*", "*/"]:
-        return {"Type": "Comment", "id": 1001, "value": token}
-    elif token in ["import", "implementations", "function", "main", "is", "variables", "define", "of", "begin", "display", "set", "input", "if", "then", "else", "endif", "not", "greater", "or", "equal", "return"]:
+    
+    elif token in ["import", "implementations", "function", "main", "is", "variables", "endfun" "define", "of", "begin", "display", "set", "input", "if", "then", "else", "endif", "not", "greater", "or", "equal", "return"]:
         return {"Type": "Keyword", "id": 2000, "value": token}
     elif re.match(r'^[a-zA-Z_]\w*$', token):
         return {"Type": "Identifier", "id": 3000, "value": token}
     elif re.match(r'^[0-9]+(\.[0-9]+)?$', token):
         return {"Type": "NumericLiteral", "id": 4000, "value": token}
     elif token.startswith('"') or token.startswith("'"):
-        return {"Type": "StringLiteral", "id": 5000, "value": token}
-    elif token in [":", ".", ":", ",", "/", "=", ">", "*", ")"]:
-        if token in [":", ",", "=", ")"]:
-            return {"Type": "Operator", "id": 6000, "value": token}
-        elif token in [".", "/", "*", ">"]:
-            return {"Type": "Operator", "id": 6001, "value": token}
-        elif token == ":":
-            return {"Type": "VariableDeclaration", "id": 6002, "value": token}
+        # Remove leading and trailing double quotes, "\, and /" from string literals
+        cleaned_token = token[1:-1].replace('\\"', '"').replace("\\'", "'").replace("\\/", "/")
+        return {"Type": "StringLiteral", "id": 5000, "value": cleaned_token}
+    elif token in [",", "=", ")"]:
+        return {"Type": "Operator", "id": 6000, "value": token}
+    elif token in [".", "/", "*", ">"]:
+        return {"Type": "Operator", "id": 6001, "value": token}
+    elif token == ":":
+        return {"Type": "VariableDeclaration", "id": 6002, "value": token}
     # Add more conditions for other types of tokens
 
     # If none of the above conditions match, treat it as an "UNKNOWN" token
@@ -173,5 +186,4 @@ if __name__ == '__main__':
     json_object = json.dumps(megaDict, indent=4)
     with open('OutputTokens.json', 'w') as f:
         f.write(json_object)
-
 
