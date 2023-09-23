@@ -142,12 +142,11 @@ if __name__ == '__main__':
         finalTokenList.append(newToken)
         print("New Token created: ", newToken.getData())
 
-    # Create json file by converting token obj into a dictionary
-    jsonFile = open("OutputTokens.json", "w")
+    # Converting token objects into a dictionary
 
     loopCounter = 0
     for Token in finalTokenList:
-        tokenStr = "Token_" + loopCounter.__str__()
+        tokenStr = "Token_" + str(loopCounter)
     
         # Create a dictionary for the token with relevant information
         tokenData = Token.getData()
@@ -168,9 +167,11 @@ if __name__ == '__main__':
         lst = ['Type', tokenData[0], 'id', tokenData[1], 'value', tokenData[2]]
         newList = Convert(lst)
 
-        tokenStr = "Token_" + loopCounter.__str__()
-
+        tokenStr = "Token_" + str(loopCounter)
+        
+    #Creating JSON object of the mega dictionary and writing to new output JSON file
     json_object = json.dumps(megaDict, indent=4)
-    jsonFile.write(json_object)
+    with open('OutputTokens.json', 'w') as f:
+        f.write(json_object)
 
 
