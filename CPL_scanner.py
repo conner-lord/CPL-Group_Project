@@ -17,7 +17,7 @@ def tokenize_line(line):
     in_hanging_comment = False
 
     # Combine all the regular expressions
-    regex = r'("[^"]*"|\'[^\']*\')|(/\*.*?\*/)|(//.*)|(\b(import|implementations|function|main|is|variables|define|of|begin|display|set|input|if|then|else|endif|not|greater|or|equal|return)\b)|([a-zA-Z_]\w*)|(\d+(\.\d+)?)|(:|\.|:|,|/|=|>|\*|\))'
+    regex = r'("[^"]*"|\'[^\']*\')|(/\*.*?\*/)|(//.*)|(\b(import|implementations|function|main|is|variables|define|of|begin|display|set|input|if|then|else|endif|not|greater|or|equal|return)\b)|([a-zA-Z_]\w*)|(\d+(\.\d+)?)|(:|\.|:|,|/|=|>|\*|\)|\()'
 
     matches = re.finditer(regex, line)
 
@@ -116,10 +116,10 @@ def categorize_token(token):
         # Remove leading and trailing double quotes, "\, and /" from string literals
         cleaned_token = token[1:-1].replace('\\"', '"').replace("\\'", "'").replace("\\/", "/")
         return {"Type": "StringLiteral", "id": 5000, "value": cleaned_token}
-    elif token in [",", "=", ")"]:
-        return {"Type": "Operator", "id": 6000, "value": token}
-    elif token in [".", "/", "*", ">"]:
-        return {"Type": "Operator", "id": 6001, "value": token}
+    elif token in [",","="]:
+        return {"Type": "Operator", "id": 400, "value": token}
+    elif token in tokenList["operators"]:
+        return {"Type": "Operator", "id": tokenList["operators"][str(token)], "value": token}
     elif token == ":":
         return {"Type": "VariableDeclaration", "id": 6002, "value": token}
     # Add more conditions for other types of tokens
