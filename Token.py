@@ -49,20 +49,18 @@ tokenList = {
 
     },
 
-    "identifiers": {
-    },
-
     "operators": {
-        '+': 400,
-        '-': 401,
-        '*': 402,
-        '/': 403,
-        '^': 404,
-        '>': 405,
-        '<': 406,
-        '"': 407,
+        '+': 401,
+        '-': 402,
+        '*': 403,
+        '/': 404,
+        '^': 405,
+        '>': 406,
+        '<': 407,
         '=': 408,
-        'add': 409
+        '(':409,
+        ')':410,
+        '.':411 #TODO Need to add some way to signify operator vs special symbol
     },
 
     "specialSymbols": {
