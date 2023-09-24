@@ -10,12 +10,6 @@ def remove_items(test_list, item):
     res = [i for i in test_list if i != item]
     return res
 
-import re
-
-import re
-
-import re
-
 def tokenize_line(line):
     tokens = []
     current_token = ""
@@ -33,22 +27,11 @@ def tokenize_line(line):
         if token.strip() == "":
             continue  # Ignore whitespace tokens
 
-        if '*/' in token:
-            in_hanging_comment = True
-            continue  # Ignore the end of the hanging comment token
-
-        if in_hanging_comment:
-            continue  # Ignore tokens within hanging comments
-
         if '//' in token:
             # If '//' is found, truncate the token to exclude everything after '//'
             token = token.split('//')[0].strip()
 
         tokens.append(token)
-
-        if '/*' in token:
-            in_hanging_comment = False
-            continue  # Ignore the start of the hanging comment token
 
     return tokens
 
@@ -66,7 +49,7 @@ def filter_file(File_name):
     in_hanging_comment = False  # Flag to track if we're inside a hanging comment
 
     for line in file:
-        if '/*' in line:
+        if 'description' in line:
             in_hanging_comment = True
 
         if in_hanging_comment:
@@ -109,15 +92,24 @@ def merge_dictionaries(dict1, dict2):
     merge_dict.update(dict2)
     return merge_dict
 
+ident_counter = 3000
+identifier_map = {}
 # Function to categorize tokens
 def categorize_token(token):
-    if token == "EOS":
-        return {"Type": "EndOfStatement", "id": 1000, "value": token}
-    
-    elif token in ["import", "implementations", "function", "main", "is", "variables", "endfun" "define", "of", "begin", "display", "set", "input", "if", "then", "else", "endif", "not", "greater", "or", "equal", "return"]:
-        return {"Type": "Keyword", "id": 2000, "value": token}
+    global ident_counter
+
+    if token in tokenList["keywords"]:
+        return {"Type": "Keyword", "id": tokenList["keywords"][str(token)], "value": token}
     elif re.match(r'^[a-zA-Z_]\w*$', token):
-        return {"Type": "Identifier", "id": 3000, "value": token}
+        #Increment for each ID that is different than one already in the token list
+        #Allows for each identifier to have a unique id
+        if token in identifier_map:
+            return {"Type": "Identifier", "id": identifier_map[token], "value": token}
+        
+        result = {"Type": "Identifier", "id": ident_counter, "value": token}
+        identifier_map[token] = ident_counter
+        ident_counter+=1
+        return result
     elif re.match(r'^[0-9]+(\.[0-9]+)?$', token):
         return {"Type": "NumericLiteral", "id": 4000, "value": token}
     elif token.startswith('"') or token.startswith("'"):
@@ -186,4 +178,3 @@ if __name__ == '__main__':
     json_object = json.dumps(megaDict, indent=4)
     with open('OutputTokens.json', 'w') as f:
         f.write(json_object)
-
