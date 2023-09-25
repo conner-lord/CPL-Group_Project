@@ -5,11 +5,6 @@ import re
 
 # Group members (Patrick Mahon, Conner Lord, Jonathan Lin)
 
-def remove_items(test_list, item):
-    # Using list comprehension to perform the task
-    res = [i for i in test_list if i != item]
-    return res
-
 def tokenize_line(line):
     tokens = []
     current_token = ""
@@ -34,8 +29,6 @@ def tokenize_line(line):
         tokens.append(token)
 
     return tokens
-
-
 
 def filter_file(File_name):
     try:
@@ -69,28 +62,6 @@ def filter_file(File_name):
                 lineList.append(lineTokens)
 
     return lineList
-
-
-
-# checks if a string is a float
-def isfloat(num):
-    try:
-        float(num)
-        return True
-    except ValueError:
-        return False
-    
-# converts list to dictionary
-def Convert(a):
-    it = iter(a)
-    res_dct = dict(zip(it, it))
-    return res_dct
-
-# adds two dictionaries together
-def merge_dictionaries(dict1, dict2):
-    merge_dict = dict1.copy()
-    merge_dict.update(dict2)
-    return merge_dict
 
 ident_counter = 3000
 identifier_map = {}
