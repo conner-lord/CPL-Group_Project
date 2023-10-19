@@ -12,7 +12,7 @@ def tokenize_line(line):
     in_hanging_comment = False
 
     # Combine all the regular expressions
-    regex = r'("[^"]*"|\'[^\']*\')|(/\*.*?\*/)|(//.*)|(\b(import|implementations|function|main|is|variables|define|of|begin|display|set|input|if|then|else|endif|not|greater|or|equal|return)\b)|([a-zA-Z_]\w*)|(\d+(\.\d+)?)|(:|\.|:|,|/|=|>|\*|\)|\()'
+    regex = r'("[^"]*"|\'[^\']*\')|(/\*.*?\*/)|(//.*)|(\b(import|implementations|function|main|is|variables|define|of|begin|display|set|input|if|then|else|endif|not|greater|or|equal|return)\b)|([a-zA-Z_]\w*)|(\d+(\.\d+)?)|(:|\.|:|,|/|=|>|\*|\)|\(|[+])'
 
     matches = re.finditer(regex, line)
 
@@ -62,6 +62,13 @@ def filter_file(File_name):
                 lineList.append(lineTokens)
 
     return lineList
+
+    # converts list to dictionary
+def Convert(a):
+    it = iter(a)
+    res_dct = dict(zip(it, it))
+    return res_dct
+
 
 ident_counter = 3000
 identifier_map = {}

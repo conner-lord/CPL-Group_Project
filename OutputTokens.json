@@ -1,0 +1,62 @@
+{
+    "Token_0": {
+        "Type": "Keyword",
+        "id": 15,
+        "value": "display"
+    },
+    "Token_1": {
+        "Type": "StringLiteral",
+        "id": 5000,
+        "value": "Hello"
+    },
+    "Token_2": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_3": {
+        "Type": "Keyword",
+        "id": 16,
+        "value": "set"
+    },
+    "Token_4": {
+        "Type": "Identifier",
+        "id": 3000,
+        "value": "x"
+    },
+    "Token_5": {
+        "Type": "Operator",
+        "id": 400,
+        "value": "="
+    },
+    "Token_6": {
+        "Type": "NumericLiteral",
+        "id": 4000,
+        "value": "10"
+    },
+    "Token_7": {
+        "Type": "Operator",
+        "id": 403,
+        "value": "*"
+    },
+    "Token_8": {
+        "Type": "NumericLiteral",
+        "id": 4000,
+        "value": "5"
+    },
+    "Token_9": {
+        "Type": "Operator",
+        "id": 401,
+        "value": "+"
+    },
+    "Token_10": {
+        "Type": "Identifier",
+        "id": 3001,
+        "value": "y"
+    },
+    "Token_11": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    }
+}
