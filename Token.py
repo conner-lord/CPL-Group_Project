@@ -2,7 +2,7 @@
 tokenList = {
     "keywords":{
         'import': 0,
-        'implementation': 1,
+        'implementations': 1,
         'function': 2,
         'main': 3,
         'return': 4,
@@ -40,7 +40,13 @@ tokenList = {
         'for': 36,
         'to': 37,
         'do': 38,
-        'endfor': 39
+        'endfor': 39,
+        'if': 40,
+        'NumericLiteral': 41,
+        'StringLiteral': 42,
+        'then': 43,
+        'endif': 44,
+        'else': 45
 
     },
 
@@ -57,6 +63,8 @@ tokenList = {
         'svalue': 209,
         'num': 210,
         'varr': 211,
+        't': 212,
+        'pt': 213,
         'varr[j]': 212 #Fix for deliverable 2...
     },
 
@@ -70,7 +78,13 @@ tokenList = {
         '<': 406,
         '"': 407,
         '=': 408,
-        'add': 409
+        'add': 409,
+        'greater': 408,
+        'or': 409,
+        'equal': 410,
+        'not': 411
+        
+        
     },
 
     "specialSymbols": {
