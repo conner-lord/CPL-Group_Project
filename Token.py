@@ -46,7 +46,31 @@ tokenList = {
         'declarations': 42,
         'loop': 43,
         'parameters': 44
+        'if': 45,
+        'NumericLiteral': 46,
+        'StringLiteral': 47,
+        'then': 48,
+        'endif': 49,
+        'else': 50
 
+    },
+
+    "identifiers": {
+        'x': 200,
+        'r': 201,
+        'area': 202,
+        'cir': 203,
+        'pchar': 204,
+        'j': 205,
+        'N': 206,
+        'sum': 207,
+        'ave': 208,
+        'svalue': 209,
+        'num': 210,
+        'varr': 211,
+        't': 212,
+        'pt': 213,
+        'varr[j]': 212
     },
 
     "operators": {
@@ -58,9 +82,11 @@ tokenList = {
         '>': 406,
         '<': 407,
         '=': 408,
-        '(':409,
-        ')':410,
-        '.':411 #TODO Need to add some way to signify operator vs special symbol
+        'add': 409,
+        'greater': 408,
+        'or': 409,
+        'equal': 410,
+        'not': 411
     },
 
     "specialSymbols": {
