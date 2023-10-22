@@ -2,6 +2,7 @@
 # Patrick Mahon, Conner Lord, Jonathan Lin
 # Description: Parser for the project deliverable that takes the SCL grammar and file to syntactically analyze the tokens
 
+
 import json
 
 from sympy import EX
@@ -44,19 +45,25 @@ class Parser:
         except (ValueError, IndexError):
             next_token = None
         return next_token
+
+    
+
     #Obtain current id at the current token index, increments through the list of identifiers by id, value to ensure it looks into the sublist(s)
     #Then if the current id is equal to any of the Identifier id's in the Identifiers list its key is added to the repeated token keys list and loop is broken to prevent repeated additions of the key
-    def identifierExists(self):
-        current_id = self.tokens.get(self.token_key_list[self.current_token], {}).get("id")
-        for id, value in self.token_lists["Identifiers"]:
-            if current_id == id:
-                self.repeated_token_keys.append(self.token_key_list[self.current_token])
+    def identifierExists(self, id, value, token_type):
+        for token_id, token_value in self.token_lists[token_type]:
+            if id == token_id and value == token_value:
+            # This ID and value already exist for this token type, don't add it to the list
+                return True
+        return False
 
-                #Test printing of list to ensure it works correctly
-                print(str(self.repeated_token_keys))
-                break
-
-    #TODO: Add begin() and start() functions based on project deliverable guidelines
+    
+    def begin(self):
+        print("Initializing Parser...")
+        parser.start()
+    
+    def start(self):
+        parser.parse()
 
     def parse(self):
         for token_key, token_data in self.tokens.items():
@@ -64,11 +71,13 @@ class Parser:
             token_id = token_data["id"]
             token_value = token_data["value"]
 
-            #print(f"{token_key}, Type: {token_type}, ID: {token_id}, Value: {token_value}")
+
+           
             self.current_token += 1
 
-            #Test call for next token
-            self.getNextToken()
+            #Prints next token
+            next_token = self.getNextToken()
+            print(f" Next Token: {next_token}")
 
             if(token_type == "StringLiteral"):
                 self.parseSL(token_data)
@@ -85,8 +94,8 @@ class Parser:
             elif(token_type == "EndOfStatement"):
                 self.parseEOS(token_data)
 
-            #Test call for identifier Exists,
-            self.identifierExists()
+
+        
         print("\n")
         self.printTokenLists()
 
@@ -95,43 +104,67 @@ class Parser:
         value = token_data["value"]
         id = token_data["id"]
         print(f"Parsed String Literal: Value: {value}, ID: {id}")
-        self.token_lists["StringLiterals"].append((id, value)) #stores token in list to be printed
+        if(self.identifierExists(id, value, "StringLiterals") == True): #Used identifierExists function to check whether to add token to list
+            return
+        else:
+            self.token_lists["StringLiterals"].append((id, value)) #stores token in list to be printed
 
+        
     def parseNL(self, token_data): #Same as above
         value = token_data["value"]
         id = token_data["id"]
         print(f"Parsed Numeric Literal: Value: {value}, ID: {id}")
-        self.token_lists["NumericLiterals"].append((id, value))
+        if(self.identifierExists(id, value, "NumericLiterals") == True):
+            return
+        else:
+            self.token_lists["NumericLiterals"].append((id, value)) #stores token in list to be printed
     
     def parseSS(self, token_data): #Same as above
         value = token_data["value"]
         id = token_data["id"]
         print(f"Parsed Special Symbol: Value: {value} ID: {id}")
-        self.token_lists["SpecialSymbols"].append((id, value))
+        if(self.identifierExists(id, value, "SpecialSymbols") == True):
+            return
+        else:
+            self.token_lists["SpecialSymbols"].append((id, value)) #stores token in list to be printed
     
     def parseIdent(self, token_data): #Same as above
         value = token_data["value"]
         id = token_data["id"]
         print(f"Parsed Identifier: Value: {value}, ID: {id}")
-        self.token_lists["Identifiers"].append((id, value))
+        if(self.identifierExists(id, value, "Identifiers") == True):
+            return
+        else:
+            self.token_lists["Identifiers"].append((id, value)) #stores token in list to be printed
 
     def parseKey(self, token_data): #Same as above
         value = token_data["value"]
         id = token_data["id"]
         print(f"Parsed Keyword: Value: {value}, ID: {id}")
-        self.token_lists["Keywords"].append((id, value))
+        if(self.identifierExists(id, value, "Keywords") == True):
+            return
+        else:
+            self.token_lists["Keywords"].append((id, value)) #stores token in list to be printed
 
     def parseOps(self, token_data):
         value = token_data["value"]
         id = token_data["id"]
         print(f"Parsed Operator: Value: {value}, ID: {id}")
-        self.token_lists["Operators"].append((id, value))
+        if(self.identifierExists(id, value, "Operators") == True):
+            return
+        else:
+            self.token_lists["Operators"].append((id, value)) #stores token in list to be printed
 
     def parseEOS(self, token_data):
         value = token_data["value"]
         id = token_data["id"]
         print(f"Parsed End of Statement: Value: {value}, ID: {id}")
-        self.token_lists["EOS"].append((id, value))
+
+        if(self.identifierExists(id, value, "EOS") == True):
+            return
+        else:
+            self.token_lists["EOS"].append((id, value)) #stores token in list to be printed
+
 
     def printTokenLists(self): # Sort and print the token lists based on their precedence (ID in this case)
         for token_type, token_list in self.token_lists.items():
@@ -144,4 +177,6 @@ class Parser:
 
 if __name__ == '__main__':
     parser = Parser('OutputTokens.json')
-    parser.parse()
+
+    parser.begin()
+
