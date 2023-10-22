@@ -2,6 +2,7 @@
 # Patrick Mahon, Conner Lord, Jonathan Lin
 # Description: Parser for the project deliverable that takes the SCL grammar and file to syntactically analyze the tokens
 
+
 import json
 
 class ParseError(Exception):
@@ -29,6 +30,7 @@ class Parser:
         self.token_key_list = list(self.tokens.keys())
         self.repeated_token_keys = []
         self.current_token = -1 #Use this to keep track of where we are in the token list
+
     def loadJsonTokens(self, filename):
         with open(filename, 'r') as file:
             tokens = json.load(file)
@@ -53,7 +55,7 @@ class Parser:
                 return True
         return False
 
-    #TODO: Add begin() and start() functions based on project deliverable guidelines
+    
     def begin(self):
         print("Initializing Parser...")
         parser.start()
@@ -67,10 +69,10 @@ class Parser:
             token_id = token_data["id"]
             token_value = token_data["value"]
 
-            #print(f"{token_key}, Type: {token_type}, ID: {token_id}, Value: {token_value}")
+           
             self.current_token += 1
 
-            #Test call for next token
+            #Prints next token
             next_token = self.getNextToken()
             print(f" Next Token: {next_token}")
 
@@ -89,7 +91,6 @@ class Parser:
             elif(token_type == "EndOfStatement"):
                 self.parseEOS(token_data)
 
-            #Test call for identifier Exists,
             
         print("\n")
         self.printTokenLists()
@@ -99,7 +100,7 @@ class Parser:
         value = token_data["value"]
         id = token_data["id"]
         print(f"Parsed String Literal: Value: {value}, ID: {id}")
-        if(self.identifierExists(id, value, "StringLiterals") == True):
+        if(self.identifierExists(id, value, "StringLiterals") == True): #Used identifierExists function to check whether to add token to list
             return
         else:
             self.token_lists["StringLiterals"].append((id, value)) #stores token in list to be printed
