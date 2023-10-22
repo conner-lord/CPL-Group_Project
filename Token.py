@@ -45,7 +45,7 @@ tokenList = {
         'setup': 41,
         'declarations': 42,
         'loop': 43,
-        'parameters': 44
+        'parameters': 44,
         'if': 45,
         'NumericLiteral': 46,
         'StringLiteral': 47,
