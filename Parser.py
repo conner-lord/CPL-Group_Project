@@ -84,6 +84,7 @@ class Parser:
                 implementAST = ASTNode("ImplementNode", [self.generate_tree(self.nextTok()), "implementations"])
             elif curr_tok["value"] == "function":
                 funcAST = ASTNode("FunctionNode", [self.generate_tree(self.nextTok)])
+                
 
                     
             
