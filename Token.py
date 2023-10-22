@@ -41,12 +41,17 @@ tokenList = {
         'to': 37,
         'do': 38,
         'endfor': 39,
-        'if': 40,
-        'NumericLiteral': 41,
-        'StringLiteral': 42,
-        'then': 43,
-        'endif': 44,
-        'else': 45
+        'forward': 40,
+        'setup': 41,
+        'declarations': 42,
+        'loop': 43,
+        'parameters': 44,
+        'if': 45,
+        'NumericLiteral': 46,
+        'StringLiteral': 47,
+        'then': 48,
+        'endif': 49,
+        'else': 50
 
     },
 
@@ -65,34 +70,28 @@ tokenList = {
         'varr': 211,
         't': 212,
         'pt': 213,
-        'varr[j]': 212 #Fix for deliverable 2...
+        'varr[j]': 212
     },
 
     "operators": {
-        '+': 400,
-        '-': 401,
-        '*': 402,
-        '/': 403,
-        '^': 404,
-        '>': 405,
-        '<': 406,
-        '"': 407,
+        '+': 401,
+        '-': 402,
+        '*': 403,
+        '/': 404,
+        '^': 405,
+        '>': 406,
+        '<': 407,
         '=': 408,
         'add': 409,
         'greater': 408,
         'or': 409,
         'equal': 410,
         'not': 411
-        
-        
     },
 
     "specialSymbols": {
         ',': 800,
         '.': 801,
-        'PI': 802,
-        'M_PI': 803,
-        '[N]': 804
     }
 }
 

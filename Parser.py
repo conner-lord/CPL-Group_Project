@@ -5,6 +5,8 @@
 
 import json
 
+from sympy import EX
+
 class ParseError(Exception):
     def __init__(self, index, msg, *args):
         self.index = index
@@ -30,7 +32,6 @@ class Parser:
         self.token_key_list = list(self.tokens.keys())
         self.repeated_token_keys = []
         self.current_token = -1 #Use this to keep track of where we are in the token list
-
     def loadJsonTokens(self, filename):
         with open(filename, 'r') as file:
             tokens = json.load(file)
@@ -44,6 +45,7 @@ class Parser:
         except (ValueError, IndexError):
             next_token = None
         return next_token
+
     
 
     #Obtain current id at the current token index, increments through the list of identifiers by id, value to ensure it looks into the sublist(s)
@@ -69,6 +71,7 @@ class Parser:
             token_id = token_data["id"]
             token_value = token_data["value"]
 
+
            
             self.current_token += 1
 
@@ -82,16 +85,17 @@ class Parser:
                 self.parseNL(token_data)
             elif(token_type == "specialSymbols"):
                 self.parseSS(token_data)
-            elif(token_type == "identifiers"):
+            elif(token_type == "Identifier"):
                 self.parseIdent(token_data)
-            elif(token_type == "keywords"):
+            elif(token_type == "Keyword"):
                 self.parseKey(token_data)
-            elif(token_type == "operators"):
+            elif(token_type == "Operator"):
                 self.parseOps(token_data)
             elif(token_type == "EndOfStatement"):
                 self.parseEOS(token_data)
 
-            
+
+        
         print("\n")
         self.printTokenLists()
 
@@ -155,10 +159,12 @@ class Parser:
         value = token_data["value"]
         id = token_data["id"]
         print(f"Parsed End of Statement: Value: {value}, ID: {id}")
+
         if(self.identifierExists(id, value, "EOS") == True):
             return
         else:
             self.token_lists["EOS"].append((id, value)) #stores token in list to be printed
+
 
     def printTokenLists(self): # Sort and print the token lists based on their precedence (ID in this case)
         for token_type, token_list in self.token_lists.items():
@@ -171,4 +177,6 @@ class Parser:
 
 if __name__ == '__main__':
     parser = Parser('OutputTokens.json')
+
     parser.begin()
+
