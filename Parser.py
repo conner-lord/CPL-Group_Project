@@ -40,7 +40,7 @@ class Parser:
     def getNextToken(self):
         next_token = None
         try:
-            next_token = self.token_key_list[self.current_token+1]
+            next_token = self.token_key_list[self.current_token]
         except (ValueError, IndexError):
             next_token = None
         return next_token
@@ -82,11 +82,11 @@ class Parser:
                 self.parseNL(token_data)
             elif(token_type == "specialSymbols"):
                 self.parseSS(token_data)
-            elif(token_type == "identifiers"):
+            elif(token_type == "Identifier"):
                 self.parseIdent(token_data)
-            elif(token_type == "keywords"):
+            elif(token_type == "Keyword"):
                 self.parseKey(token_data)
-            elif(token_type == "operators"):
+            elif(token_type == "Operator"):
                 self.parseOps(token_data)
             elif(token_type == "EndOfStatement"):
                 self.parseEOS(token_data)
