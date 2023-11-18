@@ -1,12 +1,9 @@
 package com.example;
-import java.util.Iterator;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -231,8 +228,8 @@ private Token getNextToken() {
     }
 
     private void handleIdentifier(String identifier) {
-        // Logic for handling identifiers
-        // You might want to track variable values or perform other actions based on identifiers
+        identifier = currentToken.getType();
+        System.out.println("Handling identifier: " + identifier);
     }
 
     private void handleLiteral(String literal) {
@@ -248,15 +245,8 @@ private Token getNextToken() {
         }
     }
 
-    private void handleVariableDeclaration(String variableName, String variableType, String assignedValue) {
-        // Logic for handling variable declarations
-        System.out.println("Variable Declaration: Name=" + variableName + ", Type=" + variableType + ", Value=" + assignedValue);
-    }
 
-    private void handleIfStatement(String condition) {
-        // Logic for handling if statements
-        System.out.println("Conditional Statement: Condition=" + condition);
-    }
+    
 
 
     private void handleSpecialSymbol(String symbol) {
@@ -324,6 +314,7 @@ private Token getNextToken() {
         interpreter.interpret();
     }
 }
+
 
 
 
