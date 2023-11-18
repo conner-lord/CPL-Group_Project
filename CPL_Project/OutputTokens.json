@@ -1,0 +1,462 @@
+{
+    "Token_0": {
+        "Type": "keywords",
+        "id": 0,
+        "value": "import"
+    },
+    "Token_1": {
+        "Type": "StringLiteral",
+        "id": 42,
+        "value": "scl.h"
+    },
+    "Token_2": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_3": {
+        "Type": "keywords",
+        "id": 1,
+        "value": "implementations"
+    },
+    "Token_4": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_5": {
+        "Type": "keywords",
+        "id": 2,
+        "value": "function"
+    },
+    "Token_6": {
+        "Type": "keywords",
+        "id": 3,
+        "value": "main"
+    },
+    "Token_7": {
+        "Type": "keywords",
+        "id": 10,
+        "value": "is"
+    },
+    "Token_8": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_9": {
+        "Type": "keywords",
+        "id": 11,
+        "value": "variables"
+    },
+    "Token_10": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_11": {
+        "Type": "keywords",
+        "id": 12,
+        "value": "define"
+    },
+    "Token_12": {
+        "Type": "identifiers",
+        "id": 200,
+        "value": "x"
+    },
+    "Token_13": {
+        "Type": "keywords",
+        "id": 13,
+        "value": "of"
+    },
+    "Token_14": {
+        "Type": "keywords",
+        "id": 5,
+        "value": "type"
+    },
+    "Token_15": {
+        "Type": "keywords",
+        "id": 7,
+        "value": "double"
+    },
+    "Token_16": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_17": {
+        "Type": "keywords",
+        "id": 12,
+        "value": "define"
+    },
+    "Token_18": {
+        "Type": "identifiers",
+        "id": 212,
+        "value": "t"
+    },
+    "Token_19": {
+        "Type": "keywords",
+        "id": 13,
+        "value": "of"
+    },
+    "Token_20": {
+        "Type": "keywords",
+        "id": 5,
+        "value": "type"
+    },
+    "Token_21": {
+        "Type": "keywords",
+        "id": 7,
+        "value": "double"
+    },
+    "Token_22": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_23": {
+        "Type": "keywords",
+        "id": 12,
+        "value": "define"
+    },
+    "Token_24": {
+        "Type": "identifiers",
+        "id": 213,
+        "value": "pt"
+    },
+    "Token_25": {
+        "Type": "keywords",
+        "id": 23,
+        "value": "pointer"
+    },
+    "Token_26": {
+        "Type": "keywords",
+        "id": 13,
+        "value": "of"
+    },
+    "Token_27": {
+        "Type": "keywords",
+        "id": 5,
+        "value": "type"
+    },
+    "Token_28": {
+        "Type": "keywords",
+        "id": 7,
+        "value": "double"
+    },
+    "Token_29": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_30": {
+        "Type": "keywords",
+        "id": 14,
+        "value": "begin"
+    },
+    "Token_31": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_32": {
+        "Type": "keywords",
+        "id": 15,
+        "value": "display"
+    },
+    "Token_33": {
+        "Type": "StringLiteral",
+        "id": 42,
+        "value": "Welcome to the world of SCL"
+    },
+    "Token_34": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_35": {
+        "Type": "keywords",
+        "id": 16,
+        "value": "set"
+    },
+    "Token_36": {
+        "Type": "identifiers",
+        "id": 200,
+        "value": "x"
+    },
+    "Token_37": {
+        "Type": "operators",
+        "id": 408,
+        "value": "="
+    },
+    "Token_38": {
+        "Type": "NumericLiteral",
+        "id": 41,
+        "value": "45.95"
+    },
+    "Token_39": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_40": {
+        "Type": "keywords",
+        "id": 15,
+        "value": "display"
+    },
+    "Token_41": {
+        "Type": "StringLiteral",
+        "id": 42,
+        "value": "Value of x: "
+    },
+    "Token_42": {
+        "Type": "specialSymbols",
+        "id": 800,
+        "value": ","
+    },
+    "Token_43": {
+        "Type": "identifiers",
+        "id": 200,
+        "value": "x"
+    },
+    "Token_44": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_45": {
+        "Type": "keywords",
+        "id": 21,
+        "value": "input"
+    },
+    "Token_46": {
+        "Type": "StringLiteral",
+        "id": 42,
+        "value": "type value of t: "
+    },
+    "Token_47": {
+        "Type": "specialSymbols",
+        "id": 800,
+        "value": ","
+    },
+    "Token_48": {
+        "Type": "identifiers",
+        "id": 212,
+        "value": "t"
+    },
+    "Token_49": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_50": {
+        "Type": "keywords",
+        "id": 15,
+        "value": "display"
+    },
+    "Token_51": {
+        "Type": "StringLiteral",
+        "id": 42,
+        "value": "The value of t is: "
+    },
+    "Token_52": {
+        "Type": "specialSymbols",
+        "id": 800,
+        "value": ","
+    },
+    "Token_53": {
+        "Type": "identifiers",
+        "id": 212,
+        "value": "t"
+    },
+    "Token_54": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_55": {
+        "Type": "keywords",
+        "id": 40,
+        "value": "if"
+    },
+    "Token_56": {
+        "Type": "identifiers",
+        "id": 200,
+        "value": "x"
+    },
+    "Token_57": {
+        "Type": "operators",
+        "id": 405,
+        "value": ">"
+    },
+    "Token_58": {
+        "Type": "operators",
+        "id": 408,
+        "value": "="
+    },
+    "Token_59": {
+        "Type": "identifiers",
+        "id": 212,
+        "value": "t"
+    },
+    "Token_60": {
+        "Type": "keywords",
+        "id": 43,
+        "value": "then"
+    },
+    "Token_61": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_62": {
+        "Type": "keywords",
+        "id": 15,
+        "value": "display"
+    },
+    "Token_63": {
+        "Type": "identifiers",
+        "id": 212,
+        "value": "t"
+    },
+    "Token_64": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_65": {
+        "Type": "keywords",
+        "id": 45,
+        "value": "else"
+    },
+    "Token_66": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_67": {
+        "Type": "keywords",
+        "id": 15,
+        "value": "display"
+    },
+    "Token_68": {
+        "Type": "identifiers",
+        "id": 200,
+        "value": "x"
+    },
+    "Token_69": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_70": {
+        "Type": "keywords",
+        "id": 44,
+        "value": "endif"
+    },
+    "Token_71": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_72": {
+        "Type": "keywords",
+        "id": 40,
+        "value": "if"
+    },
+    "Token_73": {
+        "Type": "operators",
+        "id": 411,
+        "value": "not"
+    },
+    "Token_74": {
+        "Type": "identifiers",
+        "id": 200,
+        "value": "x"
+    },
+    "Token_75": {
+        "Type": "operators",
+        "id": 408,
+        "value": "greater"
+    },
+    "Token_76": {
+        "Type": "operators",
+        "id": 409,
+        "value": "or"
+    },
+    "Token_77": {
+        "Type": "operators",
+        "id": 410,
+        "value": "equal"
+    },
+    "Token_78": {
+        "Type": "identifiers",
+        "id": 212,
+        "value": "t"
+    },
+    "Token_79": {
+        "Type": "keywords",
+        "id": 43,
+        "value": "then"
+    },
+    "Token_80": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_81": {
+        "Type": "keywords",
+        "id": 15,
+        "value": "display"
+    },
+    "Token_82": {
+        "Type": "identifiers",
+        "id": 200,
+        "value": "x"
+    },
+    "Token_83": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_84": {
+        "Type": "keywords",
+        "id": 44,
+        "value": "endif"
+    },
+    "Token_85": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_86": {
+        "Type": "keywords",
+        "id": 4,
+        "value": "return"
+    },
+    "Token_87": {
+        "Type": "NumericLiteral",
+        "id": 41,
+        "value": "0"
+    },
+    "Token_88": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    },
+    "Token_89": {
+        "Type": "keywords",
+        "id": 18,
+        "value": "endfun"
+    },
+    "Token_90": {
+        "Type": "keywords",
+        "id": 3,
+        "value": "main"
+    },
+    "Token_91": {
+        "Type": "EndOfStatement",
+        "id": 1000,
+        "value": "EOS"
+    }
+}
