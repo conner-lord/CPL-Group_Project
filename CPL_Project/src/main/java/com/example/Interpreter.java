@@ -1,8 +1,12 @@
 package com.example;
-
+import java.util.Iterator;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -42,60 +46,153 @@ public class Interpreter {
     }
 
     private Map<String, Token> loadTokensFromFile(String filename) {
-        Map<String, Token> tokenMap = new HashMap<>();
-
+        Map<String, Token> tokenMap = new LinkedHashMap<>();
+    
         JSONParser parser = new JSONParser();
-
+    
         try (FileReader reader = new FileReader(filename)) {
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
-
-            for (Object key : jsonObject.keySet()) {
-                String tokenKey = (String) key;
+    
+            for (int i = 0; i < jsonObject.size(); i++) {
+                String tokenKey = "Token_" + i;
                 JSONObject tokenData = (JSONObject) jsonObject.get(tokenKey);
-
+    
                 String type = (String) tokenData.get("Type");
                 int id = Integer.parseInt(tokenData.get("id").toString());
                 String value = (String) tokenData.get("value");
-
+    
                 Token token = new Token(type, id, value);
                 tokenMap.put(tokenKey, token);
+    
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
+    
         return tokenMap;
     }
+    
 
-    private Token getNextToken() {
-        if (currentToken != null) {
-            currentToken = tokens.values().iterator().next();
-            return currentToken;
-        } else {
-            return null;
-        }
+    
+
+
+private Token getNextToken() {
+    // Get the values of the tokens map
+    Collection<Token> tokenValues = tokens.values();
+
+    // Find the index of the current token
+    int currentIndex = new ArrayList<>(tokenValues).indexOf(currentToken);
+
+    // If the current token is found and there is a next token, move to it and return
+    if (currentIndex != -1 && currentIndex + 1 < tokenValues.size()) {
+        currentToken = new ArrayList<>(tokenValues).get(currentIndex + 1);
+        return currentToken;
     }
+
+    // If there are no more tokens, set currentToken to null and return null
+    currentToken = null;
+    return null;
+}
+
+
+
+
+
+    
 
     private void handleKeyword(String keyword) {
         switch (keyword) {
             case "import":
-                // Logic for handling import statement
+                String module = getNextToken().getValue();
+                System.out.println("Importing module: " + module);
+                // Implement logic for handling import statement
                 break;
             case "implementations":
-                // Logic for handling implementations statement
+                System.out.println("Handling implementations statement");
+                // Implement logic for handling implementations statement
                 break;
             case "function":
+                System.out.println("Handling function statement");
                 // Logic for handling function declaration
                 break;
             case "main":
-                // Logic for handling main function
+                System.out.println("Handling main function");
+                // Implement logic for handling main function
                 break;
+            
             case "variables":
-                // Logic for handling variable declarations
+                System.out.println("Preparing to initialize variables: ");
+                // Implement logic for handling variable declarations
                 break;
+            
             case "endfun":
-                // Logic for handling end of function
+                System.out.println("Handling end of function");
+                // Implement logic for handling end of function
                 break;
+
+            case "set":
+                System.out.println("Handling set function");
+                break;
+            
+            case "then":
+                System.out.println("Handling then function");
+                break;
+
+            case "begin":
+                System.out.println("Handling begin function");
+                break;
+
+            case "if":
+                System.out.println("Handling if function");
+                break;
+
+            case "display":
+                String display = getNextToken().getValue();
+                System.out.println("Preparing to display: " + display);
+                break;
+
+            case "input":
+                String input = getNextToken().getValue();
+                System.out.println("Gathering input for: " + input);
+                break;
+            
+            case "return":
+                System.out.println("Handling return function");
+                break;
+
+            case "endif":
+                System.out.println("Handling endif function");
+                break;
+
+            case "is":
+                System.out.println("Handling is statement");
+                break;
+
+            case "define":
+                String define = getNextToken().getValue();
+                System.out.println("Preparing to define: " + define);
+                break;
+
+            case "of":
+                System.out.println("Handling of statement");
+                break;
+                
+            case "type":
+                System.out.println("Gathering type for previous identifier");
+                break;
+
+            case "double":
+                System.out.println("Initialized type as double");
+                break;
+
+            case "pointer":
+                System.out.println("Initializing pointer variable");
+                break;
+
+            case "else":
+                System.out.println("Handling else statement");
+                break;
+
             default:
                 // Handle unrecognized keywords
                 System.err.println("Error: Unrecognized keyword - " + keyword);
@@ -105,11 +202,28 @@ public class Interpreter {
     private void handleOperator(String operator) {
         switch (operator) {
             case ">":
-                // Logic for handling greater than operator
+                System.out.println("Handling > operator");
                 break;
             case "=":
-                // Logic for handling assignment operator
+                System.out.println("Handling = operator");
                 break;
+
+            case "not":
+                System.out.println("Handling not operator");
+                break;
+
+            case "greater":
+                System.out.println("Handling greater operator");
+                break;
+
+            case "or":
+                System.out.println("Handling or operator");
+                break;
+
+            case "equal":
+                System.out.println("Handling equal operator");
+                break;
+
             default:
                 // Handle unrecognized operators
                 System.err.println("Error: Unrecognized operator - " + operator);
@@ -122,8 +236,16 @@ public class Interpreter {
     }
 
     private void handleLiteral(String literal) {
-        // Logic for handling literals
-        // This could involve assigning values, displaying, or using literals in expressions
+        switch(literal){
+            case "StringLiteral":
+                String stringLiteral = currentToken.getValue();
+                System.out.println("Handling string literal: " + stringLiteral);
+                break;
+            case "NumericLiteral":
+                System.out.println("Assigning numeric literal to x");
+                break;
+            
+        }
     }
 
     private void handleVariableDeclaration(String variableName, String variableType, String assignedValue) {
@@ -140,19 +262,19 @@ public class Interpreter {
     private void handleSpecialSymbol(String symbol) {
         switch (symbol) {
             case ",":
-                // Logic for handling comma
+                System.out.println("Handling , symbol");
                 break;
             case ":":
-                // Logic for handling colon
+                System.out.println("Handling : symbol");
                 break;
             case ";":
-                // Logic for handling semicolon
+                System.out.println("Handling ; symbol");
                 break;
             case "{":
-                // Logic for handling opening curly brace
+                System.out.println("Handling { symbol");
                 break;
             case "}":
-                // Logic for handling closing curly brace
+                System.out.println("Handling } symbol");
                 break;
             default:
                 // Handle unrecognized special symbols
@@ -173,13 +295,19 @@ public class Interpreter {
                     handleIdentifier(currentToken.getValue());
                     break;
                 case "NumericLiteral":
+
+
                 case "StringLiteral":
-                    handleLiteral(currentToken.getValue());
+                    handleLiteral(currentToken.getType());
                     break;
                 case "specialSymbols":
                     handleSpecialSymbol(currentToken.getValue());
                     break;
-                
+
+                case "EndOfStatement":
+                    System.out.println(" Handled End of Statement");
+                    break;
+
                 // Add cases for other token types...
                 default:
                     // Handle unrecognized token types
