@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.json.simple.JSONObject;
@@ -36,6 +37,9 @@ class Token {
 public class Interpreter {
     private Map<String, Token> tokens;
     private Token currentToken;
+    private Map<Integer, String> identifierList = new HashMap<>();
+    private String currentIdentifier = "";
+    private Map<String, Object> symbolTable = new HashMap<>();
 
     public Interpreter(String filename) {
         tokens = loadTokensFromFile(filename);
@@ -198,7 +202,7 @@ private Token getNextToken() {
                 System.out.println("Handling > operator");
                 break;
             case "=":
-                System.out.println("Handling = operator");
+                handleAssignment();
                 break;
 
             case "not":
@@ -228,50 +232,85 @@ private Token getNextToken() {
     }
 
     private void handleIdentifier(String identifier) {
-        identifier = currentToken.getType();
-        System.out.println("Handling identifier: " + identifier);
+        identifier = currentToken.getValue();
+        int ident_id = currentToken.getId();
+        if (identifierList.isEmpty()) {
+            identifierList.put(ident_id, identifier);
+        }
+        else if(!(identifierList.containsKey(ident_id))) {
+            identifierList.put(ident_id, identifier);
+        }
+        System.out.println("Handling identifier: " + identifier + ", " + ident_id);
     }
 
-    private Object handleLiteral(String literal) {
+    private <T> handleLiteral(String literal) {
         switch(literal){
             case "StringLiteral":
                 String stringLiteral = currentToken.getValue();
-                System.out.println("Handling string literal: " + stringLiteral);
-                break;
+                handleStringLiteral(stringLiteral);
             case "NumericLiteral":
                 String numericLiteral = currentToken.getValue();
                 System.out.println("Handling Numeric Literal: " + numericLiteral);
                     try {
-                        System.out.println("Handling Integer...");
                         int intTokenValue = Integer.parseInt(numericLiteral);
-                        return intTokenValue;
+                        handleIntegerLiteral(intTokenValue);
                     } catch (NumberFormatException e1) {
                         try {
-                            System.out.println("Handling Float...");
                             float floatTokenValue = Float.parseFloat(numericLiteral);
-                            return floatTokenValue;
+                            handleFloatLiteral(floatTokenValue);
                         } catch (NumberFormatException e2) {
                             try {
-                                System.out.println("Handling Double...");
                                 double doubleTokenValue = Double.parseDouble(numericLiteral);
-                                return doubleTokenValue;
+                                handleDoubleLiteral(doubleTokenValue);
                             } catch (NumberFormatException e3) {
                                 System.err.println("Invalid Numeric Literal format '" + numericLiteral + "'");
                             }
                         }
                     }
-                    finally {
-                    System.out.println("Assigning numeric literal to x");
-                    }
         }
-        return null;
+    }
+    private String handleStringLiteral(String stringLiteral) {
+        System.out.print("Handling String Literal");
+        return stringLiteral;
+    }
+    private Integer handleIntegerLiteral(int tokenValue) {
+        System.out.println("Handling Integer...");
+        return tokenValue;
+    }
+    private Float handleFloatLiteral(float tokenValue) {
+        System.out.println("Handling Float...");
+        return tokenValue;
+    }
+    private Double handleDoubleLiteral(double tokenValue) {
+        System.out.println("Handling Double...");
+        return tokenValue;
     }
 
+    private void handleAssignment() {
+
+        String varName = currentIdentifier;
+        getNextToken(); //Move past "="
+
+        Object exprValue = handleExpression();
+
+        symbolTable.put(varName, exprValue);
+    }
+    private Object handleExpression() {
+        Object exprValue = handleLiteral(currentToken.getValue());
+
+        System.out.println("Expression value: " + exprValue);
+
+        getNextToken();
+
+        return exprValue;
+    }
+
+
     private void handleFunctionDeclaration() throws ParseException {
-        String functionName = getNextToken().getValue(); // Assuming function name immediately follows "function"
+        String functionName = getNextToken().getValue();  //Getting Function name
         System.out.println("Defining function: " + functionName);
     
-        // Parse return type (if any)
+        // Parse return type
         String returnType = getNextToken().getValue();
         while (!(currentToken.getValue().equals("type"))) {
             returnType = getNextToken().getValue();
@@ -282,46 +321,137 @@ private Token getNextToken() {
         }
         
         System.out.println("Return type: " + returnType);
-    
-        // Parse "parameters" keyword
-        if (!(getNextToken().getValue().equals("is"))) {
-            System.out.println("Error: Expcected 'is' but got " + currentToken.getValue());
-            throw new ParseException(0);
-        }
-        getNextToken();
-
-        /////////////////////////////////////////////////////////////
-        /*Conner currently working on below for Function definition*/
-        /////////////////////////////////////////////////////////////
-
-        while (!(currentToken.getValue().equals("begin"))) {
+        
+        //While function has not ended
+        while (!currentToken.getValue().equals("endfun")) {
+            //Moves past any end of statement tokens found prior to beginning the function body
+            if (currentToken.getType().equals("EndOfStatement")) {
+                getNextToken();
+            }
+            // Parse parameters (if any)
             if (currentToken.getValue().equals("parameters")) {
-                ArrayList<String> parameters = new ArrayList<>();
-                while (!(currentToken.getType().equals("EndOfStatement"))) {
-
-                    if (!currentToken.getValue().equals("of") && !currentToken.getValue().equals("type")) {
-                        parameters.add(currentToken.getValue());
+                System.out.println("Handling parameters.");
+                getNextToken(); // Move past "parameters"
+                Map<String, String> parameters = new HashMap<>();
+            
+                // Parameter declarations
+                while (!(currentToken.getValue().equals("is"))) {
+                    if (currentToken.getValue().equals(",") || currentToken.getType().equals("EndOfStatement")) {
+                        getNextToken(); // Move past "," or EOS
+                    } else {
+                        String paramName = currentToken.getValue();
+                        getNextToken();
+                        boolean isArray = false;
+                        String arrayType = null;
+                        if(currentToken.getValue().equals("array")){
+                            System.out.println("  Generating array for " + paramName);
+                            isArray = true;
+                            getNextToken(); //Move past "array"
+                            getNextToken(); //Move past "["
+                            getNextToken(); //Move past "]"
+                            getNextToken(); //Move past "of"
+                            getNextToken(); //Move past "type"
+                            arrayType = currentToken.getValue();
+                            System.out.println("   Array is of type " + arrayType);
+                        }
+                        getNextToken(); //Move past "of"
+                        getNextToken(); //Move past "type"
+                        String paramType = currentToken.getValue();
+                        parameters.put(paramName, paramType);
+                        getNextToken(); //Move past param type
                     }
                     getNextToken();
-                    System.out.println("Function parameters: " + parameters);
+                }
+                if (!(parameters.isEmpty())) {
+                    for (Map.Entry<String, String> entry : parameters.entrySet()) {
+                    String paramName = entry.getKey();
+                    String paramType = entry.getValue();
+                    System.out.println(" Parameter: Name = " + paramName + ", Type = " + paramType);
+                    }
+                }
+            
+                // Skip past any "EndOfStatement" tokens
+                if (currentToken.getType().equals("EndOfStatement")) {
+                    getNextToken();
                 }
             }
-        }
-    
-        // Parse function specifications
-        while (!currentToken.getValue().equals("begin")) {
-            getNextToken(); // Move past "begin"
-        }
-    
-        // Parse function body (assuming "{" and "}" delimiters)
-        while (!currentToken.getValue().equals("endfun")) {
-            // Handle statements inside the function body
-            // You may need to recursively call other methods to interpret statements
+            if (currentToken.getValue().equals("variables")) {
+                System.out.println("Handling Variables.");
+                getNextToken(); //Move past "variables"
+                getNextToken(); //Move past initial EOS
+                Map<String, String> variables = new HashMap<>(); //Map containing variables
+
+                while (!(currentToken.getValue().equals("begin"))) {
+                    //Move past EOS tokens
+                    if (currentToken.getType().equals("EndOfStatement")) {
+                        getNextToken();
+                    }
+                    if (currentToken.getValue().equals("define")) {
+                        getNextToken(); //Move past "define"
+                        String varName = currentToken.getValue(); //get variable name
+                        handleIdentifier(varName);
+                        getNextToken();
+                        if (currentToken.getValue().equals("of")) { //Move past "of"
+                            getNextToken();
+                            if (currentToken.getValue().equals("type")) { //Move past "type"
+                                getNextToken();
+                                String varType = getNextToken().getValue(); //Get variable type
+                                variables.put(varName, varType);
+                            }
+                        }
+                    }
+                    getNextToken();
+                }
+                //Printing out variables and types
+                if (!(variables.isEmpty())) {
+                    for (Map.Entry<String, String> entry : variables.entrySet()) {
+                        String varName = entry.getKey();
+                        String varType = entry.getValue();
+                        System.out.println(" Variable: Name = " + varName + ", Type = " + varType);
+                    }
+                }
+            }
+
+            if (currentToken.getValue().equals("begin")) {
+                
+                while (!(currentToken.getValue().equals("exit"))) {
+                    if (currentToken.getType().equals("EndOfStatement")) {
+                        getNextToken();
+                    }
+                    
+                    if (currentToken.getValue().equals("display")) {
+                        System.out.println("Displaying");
+                        getNextToken(); //Skip "display"
+                        System.out.println(currentToken.getValue());
+                        if (currentToken.getType().equals("StringLiteral")) {
+                            String displayString = handleLiteral(currentToken.getValue()); //Handle string
+                            if (currentToken.getValue().equals(",")) {
+                                getNextToken();
+                                String varName = currentToken.getValue();
+                                if (symbolTable.containsKey(varName)) {
+                                    Object varValue = symbolTable.get(varName);
+                                    System.out.println("Displaying variable '" + varName + "' with value: " + varValue);
+                                }
+                                else {
+                                    System.err.println("Error: Variable '" + varName + "' not found.");
+                                }
+                            }
+                        }
+                    }
+                    if (currentToken.getValue().equals("set")) {
+                        if (identifierList.containsKey(currentToken.getId())) {
+                            System.out.println("Setting " + currentToken.getValue());
+                            handleAssignment();
+                        }
+                    }
+                    getNextToken();
+                }
+            }
             getNextToken();
         }
-    
-        System.out.println("End of function: " + functionName);
+        
     }
+    
 
 
     
@@ -360,6 +490,7 @@ private Token getNextToken() {
                     handleOperator(currentToken.getValue());
                     break;
                 case "Identifier":
+                    currentIdentifier = currentToken.getValue();
                     handleIdentifier(currentToken.getValue());
                     break;
                 case "NumericLiteral":
@@ -375,7 +506,6 @@ private Token getNextToken() {
                     System.out.println(" Handled End of Statement");
                     break;
 
-                // Add cases for other token types...
                 default:
                     // Handle unrecognized token types
                     System.err.println("Error: Unrecognized token type - " + currentToken.getType() + ": '" + currentToken.getValue() + "'");
@@ -387,7 +517,7 @@ private Token getNextToken() {
     }
 
     public static void main(String[] args) throws ParseException {
-        Interpreter interpreter = new Interpreter("C:\\Users\\joshl\\CPL_Proj3\\OutputTokens.json");
+        Interpreter interpreter = new Interpreter("\\OutputTokens.json");
         interpreter.interpret();
     }
 }
