@@ -233,47 +233,50 @@ private Token getNextToken() {
 
     private void handleIdentifier(String identifier) {
         identifier = currentToken.getValue();
+        System.out.println(currentToken.getValue());
         int ident_id = currentToken.getId();
+        System.out.println(ident_id);
         if (identifierList.isEmpty()) {
             identifierList.put(ident_id, identifier);
         }
         else if(!(identifierList.containsKey(ident_id))) {
             identifierList.put(ident_id, identifier);
         }
+        
         System.out.println("Handling identifier: " + identifier + ", " + ident_id);
     }
 
-    private <T> handleLiteral(String literal) {
+    private <T> T handleLiteral(String literal) {
         switch(literal){
             case "StringLiteral":
                 String stringLiteral = currentToken.getValue();
-                handleStringLiteral(stringLiteral);
+                System.out.println("Handling String Literal");
+                return (T) stringLiteral;
             case "NumericLiteral":
                 String numericLiteral = currentToken.getValue();
                 System.out.println("Handling Numeric Literal: " + numericLiteral);
                     try {
                         int intTokenValue = Integer.parseInt(numericLiteral);
-                        handleIntegerLiteral(intTokenValue);
+                        return (T) handleIntLiteral(intTokenValue);
                     } catch (NumberFormatException e1) {
                         try {
                             float floatTokenValue = Float.parseFloat(numericLiteral);
-                            handleFloatLiteral(floatTokenValue);
+                            return (T) handleFloatLiteral(floatTokenValue);
                         } catch (NumberFormatException e2) {
                             try {
                                 double doubleTokenValue = Double.parseDouble(numericLiteral);
-                                handleDoubleLiteral(doubleTokenValue);
+                                return (T) handleDoubleLiteral(doubleTokenValue);
                             } catch (NumberFormatException e3) {
                                 System.err.println("Invalid Numeric Literal format '" + numericLiteral + "'");
                             }
-                        }
                     }
+                }
+            default:
+                System.err.println("Unhandled literal type: " + literal);
+                throw new IllegalArgumentException("Unhandled literal type: " + literal);
         }
     }
-    private String handleStringLiteral(String stringLiteral) {
-        System.out.print("Handling String Literal");
-        return stringLiteral;
-    }
-    private Integer handleIntegerLiteral(int tokenValue) {
+    private Integer handleIntLiteral(int tokenValue) {
         System.out.println("Handling Integer...");
         return tokenValue;
     }
@@ -295,8 +298,8 @@ private Token getNextToken() {
 
         symbolTable.put(varName, exprValue);
     }
-    private Object handleExpression() {
-        Object exprValue = handleLiteral(currentToken.getValue());
+    private <T> T handleExpression() {
+        T exprValue = handleLiteral(currentToken.getValue());
 
         System.out.println("Expression value: " + exprValue);
 
@@ -390,15 +393,18 @@ private Token getNextToken() {
                         getNextToken(); //Move past "define"
                         String varName = currentToken.getValue(); //get variable name
                         handleIdentifier(varName);
-                        getNextToken();
+                        getNextToken(); //move past "x"
                         if (currentToken.getValue().equals("of")) { //Move past "of"
                             getNextToken();
                             if (currentToken.getValue().equals("type")) { //Move past "type"
                                 getNextToken();
-                                String varType = getNextToken().getValue(); //Get variable type
+                                String varType = currentToken.getValue(); //Get variable type
                                 variables.put(varName, varType);
                             }
                         }
+                    }
+                    if (currentToken.getValue().equals("begin")) {
+                        break;
                     }
                     getNextToken();
                 }
@@ -422,9 +428,10 @@ private Token getNextToken() {
                     if (currentToken.getValue().equals("display")) {
                         System.out.println("Displaying");
                         getNextToken(); //Skip "display"
-                        System.out.println(currentToken.getValue());
                         if (currentToken.getType().equals("StringLiteral")) {
-                            String displayString = handleLiteral(currentToken.getValue()); //Handle string
+                            String displayString = handleLiteral(currentToken.getType()); //Handle string
+                            System.out.println(" " + displayString);
+                            getNextToken();
                             if (currentToken.getValue().equals(",")) {
                                 getNextToken();
                                 String varName = currentToken.getValue();
@@ -444,17 +451,21 @@ private Token getNextToken() {
                             handleAssignment();
                         }
                     }
+                    if (currentToken.getValue().equals("exit")) {
+                        System.out.println("exit");
+                        break;
+                    }
                     getNextToken();
                 }
+            }
+            if (currentToken.getValue().equals("endfun")) {
+                System.out.println("end function");
+                break;               
             }
             getNextToken();
         }
         
     }
-    
-
-
-    
 
 
     private void handleSpecialSymbol(String symbol) {
@@ -517,7 +528,7 @@ private Token getNextToken() {
     }
 
     public static void main(String[] args) throws ParseException {
-        Interpreter interpreter = new Interpreter("\\OutputTokens.json");
+        Interpreter interpreter = new Interpreter("C:\\Users\\joshl\\CPL_Proj3\\demo_cpl_proj\\src\\main\\java\\com\\cpl\\OutputTokens.json");
         interpreter.interpret();
     }
 }
